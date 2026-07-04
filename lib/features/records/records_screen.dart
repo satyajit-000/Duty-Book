@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../../core/enumerations/record_filter_type.dart';
 import '../../core/theme/app_colors.dart';
 import '../../providers/filter_provider.dart';
+import '../../shared/widgets/records_filter_header.dart';
+import '../../shared/widgets/summary_item.dart';
 import './widgets/display_options_dialog.dart';
 
 class RecordsScreen extends ConsumerStatefulWidget {
@@ -28,7 +29,39 @@ class _RecordsScreenState extends ConsumerState<RecordsScreen> {
 
       body: Column(
         children: [
-          _buildHeader(selectedFilter),
+          RecordsFilterHeader(
+            selectedDate: DateTime(2026, 7),
+            onPrevious: () {},
+            onNext: () {},
+            onFilterTap: () {
+              showDialog(
+                context: context,
+                builder: (_) => DisplayOptionsDialog(
+                  selectedFilter: selectedFilter,
+                  onSelected: (filter) {
+                    ref.read(filterProvider.notifier).updateFilter(filter);
+                  },
+                ),
+              );
+            },
+            summaryItems: const [
+              SummaryItem(
+                title: 'REVENUE',
+                value: '+₹26,000',
+                color: AppColors.success,
+              ),
+              SummaryItem(
+                title: 'FUEL',
+                value: '-₹9,500',
+                color: AppColors.expense,
+              ),
+              SummaryItem(
+                title: 'PROFIT',
+                value: '+₹16,500',
+                color: Colors.white,
+              ),
+            ],
+          ),
           Expanded(
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -67,116 +100,6 @@ class _RecordsScreenState extends ConsumerState<RecordsScreen> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildHeader(RecordFilterType selectedFilter) {
-    return Container(
-      color: AppColors.primary,
-      padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-      child: Column(
-        children: [
-          const SizedBox(height: 8),
-          Row(
-            children: [
-              const Spacer(),
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.chevron_left, color: Colors.white),
-              ),
-
-              Expanded(
-                child: Center(
-                  child: Text(
-                    DateFormat('MMMM yyyy').format(DateTime(2026, 7)),
-                    style: const TextStyle(
-                      color: AppColors.primaryLight,
-                      fontSize: 22,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-              ),
-
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.chevron_right, color: Colors.white),
-              ),
-
-              const SizedBox(width: 20),
-
-              IconButton(
-                onPressed: () => showDialog(
-                  context: context,
-                  builder: (_) => DisplayOptionsDialog(
-                    selectedFilter: selectedFilter,
-                    onSelected: (filter) {
-                      ref.read(filterProvider.notifier).updateFilter(filter);
-                    },
-                  ),
-                ),
-                icon: const Icon(Icons.tune, color: Colors.white),
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 20),
-
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _SummaryItem(
-                title: 'REVENUE',
-                value: '+₹26,000',
-                color: AppColors.success,
-              ),
-              _SummaryItem(
-                title: 'FUEL',
-                value: '-₹9,500',
-                color: AppColors.expense,
-              ),
-              _SummaryItem(
-                title: 'PROFIT',
-                value: '+₹16,500',
-                color: Colors.white,
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _SummaryItem extends StatelessWidget {
-  final String title;
-  final String value;
-  final Color color;
-
-  const _SummaryItem({
-    required this.title,
-    required this.value,
-    required this.color,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          title,
-          style: const TextStyle(color: Colors.white70, fontSize: 12),
-        ),
-        const SizedBox(height: 6),
-        Text(
-          value,
-          style: TextStyle(
-            color: color,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ],
     );
   }
 }
