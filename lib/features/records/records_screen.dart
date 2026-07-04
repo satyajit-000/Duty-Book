@@ -2,9 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../core/theme/app_colors.dart';
+import './widgets/display_options_dialog.dart';
 
-class RecordsScreen extends StatelessWidget {
+class RecordsScreen extends StatefulWidget {
   const RecordsScreen({super.key});
+
+  @override
+  State<RecordsScreen> createState() => _RecordsScreenState();
+}
+
+class _RecordsScreenState extends State<RecordsScreen> {
+  RecordFilterType selectedFilter = RecordFilterType.monthly;
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +88,7 @@ class RecordsScreen extends StatelessWidget {
                   child: Text(
                     DateFormat('MMMM yyyy').format(DateTime(2026, 7)),
                     style: const TextStyle(
-                      color: Colors.white,
+                      color: AppColors.primaryLight,
                       fontSize: 22,
                       fontWeight: FontWeight.w700,
                     ),
@@ -96,7 +104,17 @@ class RecordsScreen extends StatelessWidget {
               const SizedBox(width: 20),
 
               IconButton(
-                onPressed: () {},
+                onPressed: () => showDialog(
+                  context: context,
+                  builder: (_) => DisplayOptionsDialog(
+                    selectedFilter: selectedFilter,
+                    onSelected: (filter) {
+                      setState(() {
+                        selectedFilter = filter;
+                      });
+                    },
+                  ),
+                ),
                 icon: const Icon(Icons.tune, color: Colors.white),
               ),
             ],

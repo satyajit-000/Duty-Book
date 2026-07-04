@@ -16,7 +16,7 @@ class AppColors {
   static const Color border = Color(0xFFDDE7E3);
 
   static const Color success = Color(0xFF25C65E);
-  static const Color expense = Color(0xFFE13939);
+  static const Color expense = Color(0xFFEC4E4E);
   static const Color warning = Color(0xFFF59E0B);
 
   static const Color shadow = Color(0x1A000000);
