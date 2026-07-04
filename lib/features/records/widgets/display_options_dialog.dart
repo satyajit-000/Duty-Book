@@ -1,16 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/enumerations/record_filter_type.dart';
 import '../../../shared/widgets/app_dialog.dart';
-
-enum RecordFilterType {
-  daily,
-  weekly,
-  monthly,
-  threeMonths,
-  sixMonths,
-  yearly,
-  custom,
-}
 
 class DisplayOptionsDialog extends StatelessWidget {
   final RecordFilterType selectedFilter;

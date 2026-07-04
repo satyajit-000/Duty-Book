@@ -1,32 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../../core/enumerations/record_filter_type.dart';
 import '../../core/theme/app_colors.dart';
+import '../../providers/filter_provider.dart';
 import './widgets/display_options_dialog.dart';
 
-class RecordsScreen extends StatefulWidget {
+class RecordsScreen extends ConsumerStatefulWidget {
   const RecordsScreen({super.key});
 
   @override
-  State<RecordsScreen> createState() => _RecordsScreenState();
+  ConsumerState<RecordsScreen> createState() => _RecordsScreenState();
 }
 
-class _RecordsScreenState extends State<RecordsScreen> {
-  RecordFilterType selectedFilter = RecordFilterType.monthly;
-
+class _RecordsScreenState extends ConsumerState<RecordsScreen> {
   @override
   Widget build(BuildContext context) {
+    final selectedFilter = ref.watch(filterProvider).type;
     return Scaffold(
       backgroundColor: AppColors.background,
 
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.add, fontWeight: FontWeight.bold),
       ),
 
       body: Column(
         children: [
-          _buildHeader(),
+          _buildHeader(selectedFilter),
           Expanded(
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -68,7 +70,7 @@ class _RecordsScreenState extends State<RecordsScreen> {
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(RecordFilterType selectedFilter) {
     return Container(
       color: AppColors.primary,
       padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
@@ -109,9 +111,7 @@ class _RecordsScreenState extends State<RecordsScreen> {
                   builder: (_) => DisplayOptionsDialog(
                     selectedFilter: selectedFilter,
                     onSelected: (filter) {
-                      setState(() {
-                        selectedFilter = filter;
-                      });
+                      ref.read(filterProvider.notifier).updateFilter(filter);
                     },
                   ),
                 ),
