@@ -1,9 +1,13 @@
+import 'package:drift/drift.dart' hide Column;
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../core/enumerations/ac_type.dart';
 import '../../core/theme/app_colors.dart';
-import 'models/custom_expense.dart';
+import '../../data/database/app_database.dart';
+import '../../providers/service_provider.dart';
+import 'models/custom_expense.dart' as form_model;
 import 'models/duty_form_model.dart';
 import 'widgets/add_custom_expense_dialog.dart';
 import 'widgets/app_date_field.dart';
@@ -13,7 +17,7 @@ import 'widgets/expense_card.dart';
 import 'widgets/expense_chip.dart';
 import 'widgets/summary_row.dart';
 
-class AddEditDutyScreen extends StatefulWidget {
+class AddEditDutyScreen extends ConsumerStatefulWidget {
   final DutyFormModel? initialForm;
 
   const AddEditDutyScreen({super.key, this.initialForm});
@@ -21,10 +25,10 @@ class AddEditDutyScreen extends StatefulWidget {
   bool get isEditMode => initialForm != null;
 
   @override
-  State<AddEditDutyScreen> createState() => _AddEditDutyScreenState();
+  ConsumerState<AddEditDutyScreen> createState() => _AddEditDutyScreenState();
 }
 
-class _AddEditDutyScreenState extends State<AddEditDutyScreen> {
+class _AddEditDutyScreenState extends ConsumerState<AddEditDutyScreen> {
   final dateController = TextEditingController(
     text: DateFormat('dd MMM yyyy').format(DateTime.now()),
   );
@@ -50,7 +54,7 @@ class _AddEditDutyScreenState extends State<AddEditDutyScreen> {
 
   bool _updatingKm = false;
 
-  final List<CustomExpense> customExpenses = [];
+  final List<form_model.CustomExpense> customExpenses = [];
 
   @override
   void initState() {
@@ -178,7 +182,7 @@ class _AddEditDutyScreenState extends State<AddEditDutyScreen> {
   }
 
   Future<void> _addCustomExpense() async {
-    final result = await showDialog<CustomExpense>(
+    final result = await showDialog<form_model.CustomExpense>(
       context: context,
       builder: (_) => const AddCustomExpenseDialog(),
     );
@@ -190,11 +194,44 @@ class _AddEditDutyScreenState extends State<AddEditDutyScreen> {
     });
   }
 
-  void _saveDuty() {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text('Duty saved in memory later')));
+  Future<void> _saveDuty() async {
+    try {
+      final duty = DutiesCompanion.insert(
+        date: selectedDate,
+        place: placeController.text.trim(),
+        startKm: _number(startKmController),
+        endKm: _number(endKmController),
+        totalKm: _number(totalKmController),
+        acType: acType,
+        rent: _number(rentController),
+        fuelCost: _number(fuelController),
+        parking: Value(_number(parkingController)),
+        toll: Value(_number(tollController)),
+        service: Value(_number(serviceController)),
+        tyre: Value(_number(tyreController)),
+        insurance: Value(_number(insuranceController)),
+        engineOil: Value(_number(engineOilController)),
+      );
+
+      await ref.read(dutyServiceProvider).addDuty(duty);
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Duty saved successfully')));
+
+      Navigator.pop(context);
+    } catch (e) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.toString())));
+    }
   }
+
+  // ========================================================================
 
   @override
   Widget build(BuildContext context) {

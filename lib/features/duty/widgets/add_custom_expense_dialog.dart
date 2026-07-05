@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../models/custom_expense.dart';
+import '../models/custom_expense.dart' as form_model;
 import 'app_number_field.dart';
 
 class AddCustomExpenseDialog extends StatefulWidget {
@@ -56,7 +56,10 @@ class _AddCustomExpenseDialogState extends State<AddCustomExpenseDialog> {
 
             if (name.isEmpty || amount <= 0) return;
 
-            Navigator.pop(context, CustomExpense(name: name, amount: amount));
+            Navigator.pop(
+              context,
+              form_model.CustomExpense(name: name, amount: amount),
+            );
           },
           child: const Text('Add'),
         ),
