@@ -4,9 +4,10 @@ import 'package:intl/intl.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../providers/filter_provider.dart';
+import '../../shared/widgets/display_options_dialog.dart';
 import '../../shared/widgets/records_filter_header.dart';
 import '../../shared/widgets/summary_item.dart';
-import './widgets/display_options_dialog.dart';
+import 'widgets/record_tile.dart';
 
 class RecordsScreen extends ConsumerStatefulWidget {
   const RecordsScreen({super.key});
@@ -68,7 +69,7 @@ class _RecordsScreenState extends ConsumerState<RecordsScreen> {
               children: [
                 _DateHeader(date: DateTime(2026, 7, 3)),
 
-                const _RecordTile(
+                const RecordTile(
                   place: 'Bhubaneswar',
                   km: 72,
                   rent: 1300,
@@ -80,7 +81,7 @@ class _RecordsScreenState extends ConsumerState<RecordsScreen> {
 
                 _DateHeader(date: DateTime(2026, 7, 2)),
 
-                const _RecordTile(
+                const RecordTile(
                   place: 'Puri',
                   km: 180,
                   rent: 3200,
@@ -88,7 +89,7 @@ class _RecordsScreenState extends ConsumerState<RecordsScreen> {
                   acType: 'Full AC',
                 ),
 
-                const _RecordTile(
+                const RecordTile(
                   place: 'Cuttack',
                   km: 110,
                   rent: 1800,
@@ -120,50 +121,6 @@ class _DateHeader extends StatelessWidget {
         ),
         const Divider(),
       ],
-    );
-  }
-}
-
-class _RecordTile extends StatelessWidget {
-  final String place;
-  final int km;
-  final int rent;
-  final int fuel;
-  final String acType;
-
-  const _RecordTile({
-    required this.place,
-    required this.km,
-    required this.rent,
-    required this.fuel,
-    required this.acType,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.only(bottom: 12),
-      child: ListTile(
-        contentPadding: const EdgeInsets.all(16),
-
-        leading: CircleAvatar(
-          backgroundColor: AppColors.primaryLight,
-          child: const Icon(Icons.directions_car),
-        ),
-
-        title: Text(place, style: const TextStyle(fontWeight: FontWeight.bold)),
-
-        subtitle: Text('$km KM • $acType\nFuel ₹$fuel'),
-
-        trailing: Text(
-          '+₹$rent',
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: AppColors.success,
-          ),
-        ),
-      ),
     );
   }
 }

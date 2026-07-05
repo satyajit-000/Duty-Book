@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/enumerations/record_filter_type.dart';
-import '../../../shared/widgets/app_dialog.dart';
+import '../../core/enumerations/record_filter_type.dart';
+import 'app_dialog.dart';
 
 class DisplayOptionsDialog extends StatelessWidget {
   final RecordFilterType selectedFilter;
