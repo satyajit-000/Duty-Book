@@ -1,13 +1,15 @@
+import 'package:duty_book/core/enumerations/ac_type.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_colors.dart';
+import 'record_details_dialog.dart';
 
 class RecordTile extends StatelessWidget {
   final String place;
   final int km;
   final int rent;
   final int fuel;
-  final String acType;
+  final AcType acType;
 
   const RecordTile({
     super.key,
@@ -24,7 +26,18 @@ class RecordTile extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       child: ListTile(
         contentPadding: const EdgeInsets.all(16),
-
+        onTap: () {
+          showDialog(
+            context: context,
+            builder: (_) => RecordDetailsDialog(
+              place: place,
+              km: km,
+              rent: rent,
+              fuel: fuel,
+              acType: acType,
+            ),
+          );
+        },
         leading: CircleAvatar(
           backgroundColor: AppColors.primaryLight,
           child: const Icon(Icons.directions_car),
@@ -32,7 +45,7 @@ class RecordTile extends StatelessWidget {
 
         title: Text(place, style: const TextStyle(fontWeight: FontWeight.bold)),
 
-        subtitle: Text('$km KM • $acType\nFuel ₹$fuel'),
+        subtitle: Text('$km KM • ${acType.displayName}\nFuel ₹$fuel'),
 
         trailing: Text(
           '+₹$rent',

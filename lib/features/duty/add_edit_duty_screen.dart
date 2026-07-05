@@ -1,9 +1,10 @@
-import 'package:duty_book/core/enumerations/ac_type.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../core/enumerations/ac_type.dart';
 import '../../core/theme/app_colors.dart';
 import 'models/custom_expense.dart';
+import 'models/duty_form_model.dart';
 import 'widgets/add_custom_expense_dialog.dart';
 import 'widgets/app_date_field.dart';
 import 'widgets/app_dropdown_field.dart';
@@ -13,7 +14,11 @@ import 'widgets/expense_chip.dart';
 import 'widgets/summary_row.dart';
 
 class AddEditDutyScreen extends StatefulWidget {
-  const AddEditDutyScreen({super.key});
+  final DutyFormModel? initialForm;
+
+  const AddEditDutyScreen({super.key, this.initialForm});
+
+  bool get isEditMode => initialForm != null;
 
   @override
   State<AddEditDutyScreen> createState() => _AddEditDutyScreenState();
@@ -46,6 +51,37 @@ class _AddEditDutyScreenState extends State<AddEditDutyScreen> {
   bool _updatingKm = false;
 
   final List<CustomExpense> customExpenses = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    final form = widget.initialForm;
+    if (form == null) return;
+
+    selectedDate = form.date;
+    dateController.text = DateFormat('dd MMM yyyy').format(form.date);
+
+    placeController.text = form.place;
+
+    startKmController.text = form.startKm.toString();
+    endKmController.text = form.endKm.toString();
+    totalKmController.text = form.totalKm.toString();
+
+    acType = form.acType;
+
+    rentController.text = form.rent.toString();
+    fuelController.text = form.fuelCost.toString();
+
+    parkingController.text = form.parking.toString();
+    tollController.text = form.toll.toString();
+    serviceController.text = form.service.toString();
+    tyreController.text = form.tyre.toString();
+    insuranceController.text = form.insurance.toString();
+    engineOilController.text = form.engineOil.toString();
+
+    customExpenses.addAll(form.customExpenses);
+  }
 
   @override
   void dispose() {
@@ -164,7 +200,7 @@ class _AddEditDutyScreenState extends State<AddEditDutyScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(title: const Text('Add Duty')),
+      appBar: AppBar(title: Text(widget.isEditMode ? 'Edit Duty' : 'Add Duty')),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -332,7 +368,7 @@ class _AddEditDutyScreenState extends State<AddEditDutyScreen> {
             child: ElevatedButton.icon(
               onPressed: _saveDuty,
               icon: const Icon(Icons.save_rounded),
-              label: const Text('Save Duty'),
+              label: Text(widget.isEditMode ? 'Update Duty' : 'Save Duty'),
             ),
           ),
         ],

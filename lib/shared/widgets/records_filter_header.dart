@@ -30,7 +30,10 @@ class RecordsFilterHeader extends StatelessWidget {
 
           Row(
             children: [
-              const Spacer(),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.share_rounded, color: Colors.white),
+              ),
               IconButton(
                 onPressed: onPrevious,
                 icon: const Icon(Icons.chevron_left, color: Colors.white),
@@ -51,7 +54,6 @@ class RecordsFilterHeader extends StatelessWidget {
                 onPressed: onNext,
                 icon: const Icon(Icons.chevron_right, color: Colors.white),
               ),
-              const SizedBox(width: 20),
               IconButton(
                 onPressed: onFilterTap,
                 icon: const Icon(Icons.tune, color: Colors.white),
