@@ -6,11 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="a3cd3efd-0231-447b-9933-a6f805eecca0" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/core/extensions/duty_list_extension.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/core/extensions/duty_list_extension.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/features/analysis/analysis_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/analysis/analysis_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/analysis/models/duty_summary.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/core/models/duty_summary.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/records/records_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/records/records_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/reports/reports_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/reports/reports_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/providers/duty_summary_provider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/providers/duty_summary_provider.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/analysis/widgets/bar_row.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/analysis/widgets/bar_row.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/records/widgets/record_tile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/records/widgets/record_tile.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/shared/widgets/records_filter_header.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/shared/widgets/records_filter_header.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

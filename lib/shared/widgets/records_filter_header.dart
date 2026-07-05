@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/extensions/filter_state_extension.dart';
+import '../../core/extensions/number_extension.dart';
 import '../../core/theme/app_colors.dart';
 import '../../providers/duty_summary_provider.dart';
 import '../../providers/filter_provider.dart';
@@ -76,17 +77,17 @@ class RecordsFilterHeader extends ConsumerWidget {
             children: [
               SummaryItem(
                 title: 'REVENUE',
-                value: '+₹${summary.totalRevenue}',
+                value: '+₹${summary.totalRevenue.inr}',
                 color: AppColors.success,
               ),
               SummaryItem(
                 title: 'FUEL',
-                value: '-₹${summary.totalFuel}',
+                value: '-₹${summary.totalFuel.inr}',
                 color: AppColors.expense,
               ),
               SummaryItem(
                 title: 'PROFIT',
-                value: '₹${summary.totalProfit}',
+                value: '₹${summary.totalProfit.inr}',
                 color: Colors.white,
               ),
             ],

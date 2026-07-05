@@ -1,6 +1,7 @@
 import 'package:duty_book/core/enumerations/ac_type.dart';
 import 'package:flutter/material.dart';
 
+import '../../../core/extensions/number_extension.dart';
 import '../../../core/theme/app_colors.dart';
 import 'record_details_dialog.dart';
 
@@ -45,10 +46,12 @@ class RecordTile extends StatelessWidget {
 
         title: Text(place, style: const TextStyle(fontWeight: FontWeight.bold)),
 
-        subtitle: Text('$km KM • ${acType.displayName}\nFuel ₹$fuel'),
+        subtitle: Text(
+          '${km.inr} KM • ${acType.displayName}\nFuel ₹${fuel.inr}',
+        ),
 
         trailing: Text(
-          '+₹$rent',
+          '+₹${rent.inr}',
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,

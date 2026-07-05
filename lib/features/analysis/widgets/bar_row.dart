@@ -1,3 +1,4 @@
+import 'package:duty_book/core/extensions/number_extension.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_colors.dart';
@@ -23,7 +24,7 @@ class BarRow extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                label,
+                '$label (${percent.percent})',
                 style: const TextStyle(fontWeight: FontWeight.w600),
               ),
             ),

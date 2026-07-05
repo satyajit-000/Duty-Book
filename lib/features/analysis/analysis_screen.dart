@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/extensions/number_extension.dart';
 import '../../core/theme/app_colors.dart';
-import '../../providers/filter_provider.dart';
+import '../../providers/duties_provider.dart';
+import '../../providers/duty_summary_provider.dart';
 import '../../shared/widgets/records_filter_header.dart';
 import 'widgets/ac_profit_row.dart';
 import 'widgets/analysis_card.dart';
@@ -16,7 +18,10 @@ class AnalysisScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectedFilter = ref.watch(filterProvider).type;
+    final duties = ref
+        .watch(dutiesProvider)
+        .maybeWhen(data: (duties) => duties, orElse: () => []);
+    final summary = ref.watch(dutySummaryProvider);
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -28,25 +33,35 @@ class AnalysisScreen extends ConsumerWidget {
             child: ListView(
               padding: const EdgeInsets.all(16),
               children: [
-                Text(
-                  'Showing: ${selectedFilter.name}',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: AppColors.textSecondary,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(height: 12),
-
-                const AnalysisCard(
+                AnalysisCard(
                   title: 'Revenue vs Fuel vs Profit',
                   child: Column(
                     children: [
-                      BarRow(label: 'Revenue', value: '₹26,000', percent: 1.0),
-                      SizedBox(height: 12),
-                      BarRow(label: 'Fuel', value: '₹9,500', percent: 0.36),
-                      SizedBox(height: 12),
-                      BarRow(label: 'Profit', value: '₹16,500', percent: 0.64),
+                      BarRow(
+                        label: 'Revenue',
+                        value: '₹${summary.totalRevenue.inr}',
+                        percent: 1,
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      BarRow(
+                        label: 'Fuel',
+                        value: '₹${summary.totalFuel.inr}',
+                        percent: summary.totalRevenue == 0
+                            ? 0
+                            : summary.totalFuel / summary.totalRevenue,
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      BarRow(
+                        label: 'Profit',
+                        value: '₹${summary.totalProfit.inr}',
+                        percent: summary.totalRevenue == 0
+                            ? 0
+                            : summary.totalProfit / summary.totalRevenue,
+                      ),
                     ],
                   ),
                 ),
