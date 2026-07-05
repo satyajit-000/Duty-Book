@@ -1,19 +1,37 @@
+import 'package:drift/drift.dart';
+
 import '../database/app_database.dart';
+import '../repositories/custom_expense_repository.dart';
 import '../repositories/duty_repository.dart';
 
 class DutyService {
-  final DutyRepository repository;
+  final AppDatabase db;
+  final DutyRepository dutyRepository;
+  final CustomExpenseRepository customExpenseRepository;
 
-  const DutyService(this.repository);
+  const DutyService(this.db, this.dutyRepository, this.customExpenseRepository);
 
-  // ==========================================================================
   // CREATE
-  // ==========================================================================
 
-  Future<int> addDuty(DutiesCompanion duty) {
+  Future<int> addDuty({
+    required DutiesCompanion duty,
+    List<CustomExpensesCompanion> customExpenses = const [],
+  }) async {
     _validateDuty(duty);
 
-    return repository.addDuty(duty);
+    return db.transaction(() async {
+      final dutyId = await dutyRepository.addDuty(duty);
+
+      if (customExpenses.isNotEmpty) {
+        final expenses = customExpenses
+            .map((expense) => expense.copyWith(dutyId: Value(dutyId)))
+            .toList();
+
+        await customExpenseRepository.addCustomExpenses(expenses);
+      }
+
+      return dutyId;
+    });
   }
 
   Future<void> addDuties(List<DutiesCompanion> duties) async {
@@ -21,60 +39,51 @@ class DutyService {
       _validateDuty(duty);
     }
 
-    await repository.addDuties(duties);
+    await dutyRepository.addDuties(duties);
   }
 
-  // ==========================================================================
   // READ
-  // ==========================================================================
 
   Future<List<Duty>> getAllDuties() {
-    return repository.getAllDuties();
+    return dutyRepository.getAllDuties();
   }
 
   Future<Duty?> getDutyById(int id) {
-    return repository.getDutyById(id);
+    return dutyRepository.getDutyById(id);
   }
 
   Future<List<Duty>> getDutiesByDateRange({
     required DateTime startDate,
     required DateTime endDate,
   }) {
-    return repository.getDutiesByDateRange(
+    return dutyRepository.getDutiesByDateRange(
       startDate: startDate,
       endDate: endDate,
     );
   }
 
-  // ==========================================================================
   // UPDATE
-  // ==========================================================================
 
   Future<bool> updateDuty(Duty duty) {
     _validateExistingDuty(duty);
-
-    return repository.updateDuty(duty);
+    return dutyRepository.updateDuty(duty);
   }
 
-  // ==========================================================================
   // DELETE
-  // ==========================================================================
 
   Future<int> deleteDuty(int id) {
-    return repository.deleteDutyById(id);
+    return dutyRepository.deleteDutyById(id);
   }
 
   Future<int> deleteDuties(List<int> ids) {
-    return repository.deleteDutiesByIds(ids);
+    return dutyRepository.deleteDutiesByIds(ids);
   }
 
   Future<int> deleteAllDuties() {
-    return repository.deleteAllDuties();
+    return dutyRepository.deleteAllDuties();
   }
 
-  // ==========================================================================
   // VALIDATIONS
-  // ==========================================================================
 
   void _validateDuty(DutiesCompanion duty) {
     if (!duty.place.present || duty.place.value.trim().isEmpty) {

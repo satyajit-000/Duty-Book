@@ -213,7 +213,19 @@ class _AddEditDutyScreenState extends ConsumerState<AddEditDutyScreen> {
         engineOil: Value(_number(engineOilController)),
       );
 
-      await ref.read(dutyServiceProvider).addDuty(duty);
+      final expenses = customExpenses
+          .map(
+            (expense) => CustomExpensesCompanion.insert(
+              dutyId: 0, // overwritten inside transaction
+              name: expense.name,
+              amount: expense.amount,
+            ),
+          )
+          .toList();
+
+      await ref
+          .read(dutyServiceProvider)
+          .addDuty(duty: duty, customExpenses: expenses);
 
       if (!mounted) return;
 
@@ -230,8 +242,6 @@ class _AddEditDutyScreenState extends ConsumerState<AddEditDutyScreen> {
       ).showSnackBar(SnackBar(content: Text(e.toString())));
     }
   }
-
-  // ========================================================================
 
   @override
   Widget build(BuildContext context) {
