@@ -1,8 +1,9 @@
-import 'package:duty_book/core/enumerations/ac_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/theme/app_colors.dart';
+import '../../data/database/app_database.dart';
+import '../../providers/duty_provider.dart';
 import '../../providers/filter_provider.dart';
 import '../../shared/widgets/display_options_dialog.dart';
 import '../../shared/widgets/records_filter_header.dart';
@@ -21,7 +22,10 @@ class RecordsScreen extends ConsumerStatefulWidget {
 class _RecordsScreenState extends ConsumerState<RecordsScreen> {
   @override
   Widget build(BuildContext context) {
+    final dutiesAsync = ref.watch(dutiesProvider);
+
     final selectedFilter = ref.watch(filterProvider).type;
+
     return Scaffold(
       backgroundColor: AppColors.background,
 
@@ -71,39 +75,71 @@ class _RecordsScreenState extends ConsumerState<RecordsScreen> {
             ],
           ),
           Expanded(
-            child: ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              children: [
-                DateHeader(date: DateTime(2026, 7, 3)),
+            child: dutiesAsync.when(
+              loading: () => const Center(child: CircularProgressIndicator()),
 
-                const RecordTile(
-                  place: 'Bhubaneswar',
-                  km: 72,
-                  rent: 1300,
-                  fuel: 600,
-                  acType: AcType.half,
-                ),
+              error: (error, stackTrace) =>
+                  Center(child: Text(error.toString())),
 
-                const SizedBox(height: 24),
+              data: (duties) {
+                if (duties.isEmpty) {
+                  return const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(24),
+                      child: Text(
+                        'No duties found.\nTap + to add your first duty.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                    ),
+                  );
+                }
 
-                DateHeader(date: DateTime(2026, 7, 2)),
+                final groupedDuties = <DateTime, List<Duty>>{};
 
-                const RecordTile(
-                  place: 'Puri',
-                  km: 180,
-                  rent: 3200,
-                  fuel: 1400,
-                  acType: AcType.full,
-                ),
+                for (final duty in duties) {
+                  final dateKey = DateTime(
+                    duty.date.year,
+                    duty.date.month,
+                    duty.date.day,
+                  );
 
-                const RecordTile(
-                  place: 'Cuttack',
-                  km: 110,
-                  rent: 1800,
-                  fuel: 700,
-                  acType: AcType.non,
-                ),
-              ],
+                  groupedDuties.putIfAbsent(dateKey, () => []);
+                  groupedDuties[dateKey]!.add(duty);
+                }
+
+                final widgets = <Widget>[];
+
+                groupedDuties.forEach((date, dutiesForDate) {
+                  widgets.add(DateHeader(date: date));
+
+                  for (final duty in dutiesForDate) {
+                    widgets.add(
+                      RecordTile(
+                        place: duty.place,
+                        km: duty.totalKm,
+                        rent: duty.rent,
+                        fuel: duty.fuelCost,
+                        acType: duty.acType,
+                      ),
+                    );
+                  }
+
+                  widgets.add(const SizedBox(height: 24));
+                });
+
+                return ListView(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
+                  children: widgets,
+                );
+              },
             ),
           ),
         ],

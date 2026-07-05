@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/theme/app_colors.dart';
+import '../providers/service_provider.dart';
 
-class AppDrawer extends StatelessWidget {
+class AppDrawer extends ConsumerWidget {
   const AppDrawer({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Drawer(
       backgroundColor: AppColors.background,
       child: SafeArea(
@@ -48,9 +50,56 @@ class AppDrawer extends StatelessWidget {
               onTap: () {},
             ),
             ListTile(
-              leading: const Icon(Icons.delete_sweep_rounded),
+              leading: const Icon(Icons.delete_forever_rounded),
               title: const Text('Clear All Records'),
-              onTap: () {},
+              onTap: () async {
+                final shouldClear = await showDialog<bool>(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                    title: const Text('Clear All Records?'),
+                    content: const Text(
+                      'This will delete all duty records. This action cannot be undone.',
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, false),
+                        child: const Text('Cancel'),
+                      ),
+                      ElevatedButton(
+                        onPressed: () => Navigator.pop(context, true),
+                        child: const Text('Clear'),
+                      ),
+                    ],
+                  ),
+                );
+
+                if (shouldClear != true) return;
+
+                await ref.read(dutyServiceProvider).deleteAllDuties();
+
+                if (!context.mounted) return;
+
+                Navigator.pop(context);
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('All records cleared')),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.science_outlined),
+              title: const Text('Seed Sample Data'),
+              onTap: () async {
+                await ref.read(dutyServiceProvider).seedSampleDuties();
+
+                if (!context.mounted) return;
+
+                Navigator.pop(context);
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Sample duties inserted')),
+                );
+              },
             ),
 
             const Spacer(),

@@ -85,4 +85,20 @@ class DutyRepository {
   Future<int> deleteAllDuties() {
     return db.delete(db.duties).go();
   }
+
+  // ==========================================================================
+  // WATCH
+  // ==========================================================================
+
+  /// Watch all duties reactively.
+  Stream<List<Duty>> watchAllDuties() {
+    return db.select(db.duties).watch();
+  }
+
+  /// Watch a single duty reactively.
+  Stream<Duty?> watchDutyById(int id) {
+    return (db.select(
+      db.duties,
+    )..where((tbl) => tbl.id.equals(id))).watchSingleOrNull();
+  }
 }
