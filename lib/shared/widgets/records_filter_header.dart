@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../../core/theme/app_colors.dart';
 
 class RecordsFilterHeader extends StatelessWidget {
-  final DateTime selectedDate;
+  final String title;
   final VoidCallback onPrevious;
-  final VoidCallback onNext;
+  final VoidCallback? onNext;
   final VoidCallback onFilterTap;
   final List<Widget> summaryItems;
 
   const RecordsFilterHeader({
     super.key,
-    required this.selectedDate,
+    required this.title,
     required this.onPrevious,
     required this.onNext,
     required this.onFilterTap,
@@ -41,7 +40,7 @@ class RecordsFilterHeader extends StatelessWidget {
               Expanded(
                 child: Center(
                   child: Text(
-                    DateFormat('MMMM yyyy').format(selectedDate),
+                    title,
                     style: const TextStyle(
                       color: AppColors.primaryLight,
                       fontSize: 22,

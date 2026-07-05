@@ -12,7 +12,9 @@ class DutyService {
 
   const DutyService(this.db, this.dutyRepository, this.customExpenseRepository);
 
+  // ==========================================================================
   // CREATE
+  // ==========================================================================
 
   Future<int> addDuty({
     required DutiesCompanion duty,
@@ -43,7 +45,9 @@ class DutyService {
     await dutyRepository.addDuties(duties);
   }
 
+  // ==========================================================================
   // READ
+  // ==========================================================================
 
   Future<List<Duty>> getAllDuties() {
     return dutyRepository.getAllDuties();
@@ -63,14 +67,18 @@ class DutyService {
     );
   }
 
+  // ==========================================================================
   // UPDATE
+  // ==========================================================================
 
   Future<bool> updateDuty(Duty duty) {
     _validateExistingDuty(duty);
     return dutyRepository.updateDuty(duty);
   }
 
+  // ==========================================================================
   // DELETE
+  // ==========================================================================
 
   Future<int> deleteDuty(int id) {
     return dutyRepository.deleteDutyById(id);
@@ -84,7 +92,9 @@ class DutyService {
     return dutyRepository.deleteAllDuties();
   }
 
+  // ==========================================================================
   // VALIDATIONS
+  // ==========================================================================
 
   void _validateDuty(DutiesCompanion duty) {
     if (!duty.place.present || duty.place.value.trim().isEmpty) {
@@ -120,6 +130,16 @@ class DutyService {
 
   Stream<Duty?> watchDutyById(int id) {
     return dutyRepository.watchDutyById(id);
+  }
+
+  Stream<List<Duty>> watchDutiesByDateRange({
+    required DateTime startDate,
+    required DateTime endDate,
+  }) {
+    return dutyRepository.watchDutiesByDateRange(
+      startDate: startDate,
+      endDate: endDate,
+    );
   }
 
   // ==========================================================================

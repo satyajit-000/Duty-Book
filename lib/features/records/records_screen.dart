@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/extensions/filter_state_extension.dart';
 import '../../core/theme/app_colors.dart';
 import '../../data/database/app_database.dart';
-import '../../providers/duty_provider.dart';
+import '../../providers/duties_provider.dart';
 import '../../providers/filter_provider.dart';
 import '../../shared/widgets/display_options_dialog.dart';
 import '../../shared/widgets/records_filter_header.dart';
@@ -23,7 +24,7 @@ class _RecordsScreenState extends ConsumerState<RecordsScreen> {
   @override
   Widget build(BuildContext context) {
     final dutiesAsync = ref.watch(dutiesProvider);
-
+    final filter = ref.watch(filterProvider);
     final selectedFilter = ref.watch(filterProvider).type;
 
     return Scaffold(
@@ -42,9 +43,15 @@ class _RecordsScreenState extends ConsumerState<RecordsScreen> {
       body: Column(
         children: [
           RecordsFilterHeader(
-            selectedDate: DateTime(2026, 7),
-            onPrevious: () {},
-            onNext: () {},
+            title: filter.title,
+            onPrevious: () {
+              ref.read(filterProvider.notifier).previousPeriod();
+            },
+            onNext: filter.canGoNext
+                ? () {
+                    ref.read(filterProvider.notifier).nextPeriod();
+                  }
+                : null,
             onFilterTap: () {
               showDialog(
                 context: context,

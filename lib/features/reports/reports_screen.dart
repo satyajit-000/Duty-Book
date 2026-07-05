@@ -21,7 +21,7 @@ class ReportsScreen extends ConsumerWidget {
       body: Column(
         children: [
           RecordsFilterHeader(
-            selectedDate: DateTime(2026, 7),
+            title: 'DateTime(2026, 7)',
             onPrevious: () {},
             onNext: () {},
             onFilterTap: () {

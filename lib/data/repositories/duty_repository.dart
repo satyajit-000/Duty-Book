@@ -101,4 +101,19 @@ class DutyRepository {
       db.duties,
     )..where((tbl) => tbl.id.equals(id))).watchSingleOrNull();
   }
+
+  /// Watch duties by Date Range
+  Stream<List<Duty>> watchDutiesByDateRange({
+    required DateTime startDate,
+    required DateTime endDate,
+  }) {
+    return (db.select(db.duties)
+          ..where(
+            (tbl) =>
+                tbl.date.isBiggerOrEqualValue(startDate) &
+                tbl.date.isSmallerThanValue(endDate),
+          )
+          ..orderBy([(tbl) => OrderingTerm.desc(tbl.date)]))
+        .watch();
+  }
 }
