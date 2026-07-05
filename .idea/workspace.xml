@@ -6,14 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="a3cd3efd-0231-447b-9933-a6f805eecca0" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/core/enumerations/record_filter_type.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/core/enumerations/record_filter_type.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/data/repositories/duty_repository.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/data/repositories/duty_repository.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/data/services/duty_service.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/data/services/duty_service.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/features/analysis/analysis_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/analysis/analysis_screen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/analysis/models/duty_summary.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/core/models/duty_summary.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/features/records/records_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/records/records_screen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/features/reports/reports_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/reports/reports_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/providers/duty_provider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/providers/duties_provider.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/providers/filter_provider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/providers/filter_provider.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/providers/duty_summary_provider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/providers/duty_summary_provider.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/shared/widgets/records_filter_header.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/shared/widgets/records_filter_header.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -97,6 +94,7 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Desktop\Fluter\duty_book\lib\core\models" />
       <recent name="D:\Desktop\Fluter\duty_book\lib\features\settings\widgets\dart" />
       <recent name="D:\Desktop\Fluter\duty_book\lib\shared\widgets" />
     </key>

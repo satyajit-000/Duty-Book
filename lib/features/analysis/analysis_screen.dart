@@ -3,9 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../providers/filter_provider.dart';
-import '../../shared/widgets/display_options_dialog.dart';
 import '../../shared/widgets/records_filter_header.dart';
-import '../../shared/widgets/summary_item.dart';
 import 'widgets/ac_profit_row.dart';
 import 'widgets/analysis_card.dart';
 import 'widgets/bar_row.dart';
@@ -24,39 +22,8 @@ class AnalysisScreen extends ConsumerWidget {
       backgroundColor: AppColors.background,
       body: Column(
         children: [
-          RecordsFilterHeader(
-            title: 'DateTime(2026, 7)',
-            onPrevious: () {},
-            onNext: () {},
-            onFilterTap: () {
-              showDialog(
-                context: context,
-                builder: (_) => DisplayOptionsDialog(
-                  selectedFilter: selectedFilter,
-                  onSelected: (filter) {
-                    ref.read(filterProvider.notifier).updateFilter(filter);
-                  },
-                ),
-              );
-            },
-            summaryItems: const [
-              SummaryItem(
-                title: 'REVENUE',
-                value: '+₹26,000',
-                color: AppColors.success,
-              ),
-              SummaryItem(
-                title: 'FUEL',
-                value: '-₹9,500',
-                color: AppColors.expense,
-              ),
-              SummaryItem(
-                title: 'PROFIT',
-                value: '+₹16,500',
-                color: Colors.white,
-              ),
-            ],
-          ),
+          const RecordsFilterHeader(),
+
           Expanded(
             child: ListView(
               padding: const EdgeInsets.all(16),

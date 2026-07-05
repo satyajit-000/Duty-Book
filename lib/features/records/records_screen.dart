@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../core/extensions/filter_state_extension.dart';
+import '../../core/extensions/duty_list_extension.dart';
 import '../../core/theme/app_colors.dart';
-import '../../data/database/app_database.dart';
 import '../../providers/duties_provider.dart';
-import '../../providers/filter_provider.dart';
-import '../../shared/widgets/display_options_dialog.dart';
 import '../../shared/widgets/records_filter_header.dart';
-import '../../shared/widgets/summary_item.dart';
 import '../duty/add_edit_duty_screen.dart';
 import 'widgets/date_header.dart';
 import 'widgets/record_tile.dart';
@@ -24,9 +20,6 @@ class _RecordsScreenState extends ConsumerState<RecordsScreen> {
   @override
   Widget build(BuildContext context) {
     final dutiesAsync = ref.watch(dutiesProvider);
-    final filter = ref.watch(filterProvider);
-    final selectedFilter = ref.watch(filterProvider).type;
-
     return Scaffold(
       backgroundColor: AppColors.background,
 
@@ -42,45 +35,7 @@ class _RecordsScreenState extends ConsumerState<RecordsScreen> {
 
       body: Column(
         children: [
-          RecordsFilterHeader(
-            title: filter.title,
-            onPrevious: () {
-              ref.read(filterProvider.notifier).previousPeriod();
-            },
-            onNext: filter.canGoNext
-                ? () {
-                    ref.read(filterProvider.notifier).nextPeriod();
-                  }
-                : null,
-            onFilterTap: () {
-              showDialog(
-                context: context,
-                builder: (_) => DisplayOptionsDialog(
-                  selectedFilter: selectedFilter,
-                  onSelected: (filter) {
-                    ref.read(filterProvider.notifier).updateFilter(filter);
-                  },
-                ),
-              );
-            },
-            summaryItems: const [
-              SummaryItem(
-                title: 'REVENUE',
-                value: '+₹26,000',
-                color: AppColors.success,
-              ),
-              SummaryItem(
-                title: 'FUEL',
-                value: '-₹9,500',
-                color: AppColors.expense,
-              ),
-              SummaryItem(
-                title: 'PROFIT',
-                value: '+₹16,500',
-                color: Colors.white,
-              ),
-            ],
-          ),
+          const RecordsFilterHeader(),
           Expanded(
             child: dutiesAsync.when(
               loading: () => const Center(child: CircularProgressIndicator()),
@@ -106,18 +61,7 @@ class _RecordsScreenState extends ConsumerState<RecordsScreen> {
                   );
                 }
 
-                final groupedDuties = <DateTime, List<Duty>>{};
-
-                for (final duty in duties) {
-                  final dateKey = DateTime(
-                    duty.date.year,
-                    duty.date.month,
-                    duty.date.day,
-                  );
-
-                  groupedDuties.putIfAbsent(dateKey, () => []);
-                  groupedDuties[dateKey]!.add(duty);
-                }
+                final groupedDuties = duties.groupByDate();
 
                 final widgets = <Widget>[];
 

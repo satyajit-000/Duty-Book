@@ -14,4 +14,15 @@ class DutySummary {
     required this.totalKm,
     required this.totalDuties,
   });
+
+  factory DutySummary.empty() {
+    return const DutySummary(
+      totalRevenue: 0,
+      totalFuel: 0,
+      totalOtherExpense: 0,
+      totalProfit: 0,
+      totalKm: 0,
+      totalDuties: 0,
+    );
+  }
 }
