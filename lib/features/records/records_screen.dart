@@ -7,6 +7,7 @@ import '../../providers/filter_provider.dart';
 import '../../shared/widgets/display_options_dialog.dart';
 import '../../shared/widgets/records_filter_header.dart';
 import '../../shared/widgets/summary_item.dart';
+import '../duty/add_edit_duty_screen.dart';
 import 'widgets/record_tile.dart';
 
 class RecordsScreen extends ConsumerStatefulWidget {
@@ -24,7 +25,12 @@ class _RecordsScreenState extends ConsumerState<RecordsScreen> {
       backgroundColor: AppColors.background,
 
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const AddEditDutyScreen()),
+          );
+        },
         child: const Icon(Icons.add, fontWeight: FontWeight.bold),
       ),
 
