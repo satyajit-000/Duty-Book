@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 
 class AcProfitRow extends StatelessWidget {
-  final String acType;
+  final String title;
   final String avgProfit;
   final String avgKm;
   final String trips;
@@ -11,7 +11,7 @@ class AcProfitRow extends StatelessWidget {
 
   const AcProfitRow({
     super.key,
-    required this.acType,
+    required this.title,
     required this.avgProfit,
     required this.avgKm,
     required this.trips,
@@ -27,7 +27,7 @@ class AcProfitRow extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                acType,
+                title,
                 style: const TextStyle(fontWeight: FontWeight.w700),
               ),
             ),

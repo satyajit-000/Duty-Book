@@ -47,11 +47,11 @@ class RecordTile extends StatelessWidget {
         title: Text(place, style: const TextStyle(fontWeight: FontWeight.bold)),
 
         subtitle: Text(
-          '${km.inr} KM • ${acType.displayName}\nFuel ₹${fuel.inr}',
+          '${km.formatted} KM • ${acType.displayName}\nFuel ${fuel.inr}',
         ),
 
         trailing: Text(
-          '+₹${rent.inr}',
+          '+${rent.inr}',
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,

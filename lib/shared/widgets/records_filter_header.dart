@@ -77,17 +77,22 @@ class RecordsFilterHeader extends ConsumerWidget {
             children: [
               SummaryItem(
                 title: 'REVENUE',
-                value: '+₹${summary.totalRevenue.inr}',
+                value: '+${summary.totalRevenue.inr}',
                 color: AppColors.success,
               ),
               SummaryItem(
                 title: 'FUEL',
-                value: '-₹${summary.totalFuel.inr}',
+                value: '-${summary.totalFuel.inr}',
+                color: AppColors.expense,
+              ),
+              SummaryItem(
+                title: 'OTH EXP',
+                value: '-${summary.totalOtherExpense.inr}',
                 color: AppColors.expense,
               ),
               SummaryItem(
                 title: 'PROFIT',
-                value: '₹${summary.totalProfit.inr}',
+                value: summary.totalProfit.inr,
                 color: Colors.white,
               ),
             ],

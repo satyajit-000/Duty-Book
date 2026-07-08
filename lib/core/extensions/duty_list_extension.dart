@@ -90,6 +90,54 @@ extension DutyListExtension on List<Duty> {
 
   double get averageProfit {
     if (isEmpty) return 0;
-    return totalProfit / length;
+    return totalProfit / totalKm;
+  }
+
+  int get totalParking => fold(0, (sum, duty) => sum + duty.parking);
+
+  int get totalToll => fold(0, (sum, duty) => sum + duty.toll);
+
+  int get totalService => fold(0, (sum, duty) => sum + duty.service);
+
+  int get totalTyre => fold(0, (sum, duty) => sum + duty.tyre);
+
+  int get totalInsurance => fold(0, (sum, duty) => sum + duty.insurance);
+
+  int get totalEngineOil => fold(0, (sum, duty) => sum + duty.engineOil);
+
+  String? get mostFrequentPlace {
+    if (isEmpty) return null;
+
+    final grouped = groupByPlace();
+
+    return grouped.entries
+        .reduce((a, b) => a.value.length > b.value.length ? a : b)
+        .key;
+  }
+
+  AcType? get bestAcType {
+    final profits = {
+      AcType.full: profitForAc(AcType.full),
+      AcType.half: profitForAc(AcType.half),
+      AcType.non: profitForAc(AcType.non),
+    };
+
+    return profits.entries.reduce((a, b) => a.value > b.value ? a : b).key;
+  }
+
+  Map<String, int> get expenseBreakdown => {
+    'Fuel': totalFuel,
+    'Parking': totalParking,
+    'Toll': totalToll,
+    'Service': totalService,
+    'Tyre': totalTyre,
+    'Insurance': totalInsurance,
+    'Engine Oil': totalEngineOil,
+  };
+
+  String get highestExpenseCategory {
+    return expenseBreakdown.entries
+        .reduce((a, b) => a.value > b.value ? a : b)
+        .key;
   }
 }

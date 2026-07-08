@@ -1,14 +1,22 @@
 import 'package:intl/intl.dart';
 
 extension IntExtension on int {
-  String get inr {
+  String get formatted {
     return NumberFormat('#,##,##0', 'en_IN').format(this);
+  }
+
+  String get inr {
+    return '₹$formatted';
   }
 }
 
 extension DoubleExtension on double {
-  String get inr {
+  String get formatted {
     return NumberFormat('#,##,##0.##', 'en_IN').format(this);
+  }
+
+  String get inr {
+    return '₹$formatted';
   }
 
   String get percent {
