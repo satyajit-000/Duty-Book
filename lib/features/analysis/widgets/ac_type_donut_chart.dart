@@ -116,7 +116,7 @@ class AcTypeDonutChart extends StatelessWidget {
 
                   Text(
                     mostUsed.type.displayName,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: AppColors.success,
                       fontWeight: FontWeight.w600,
                     ),

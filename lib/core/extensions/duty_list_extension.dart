@@ -18,7 +18,9 @@ extension DutyListExtension on List<Duty> {
         duty.engineOil,
   );
 
-  int get totalProfit => totalRevenue - totalFuel - totalOtherExpense;
+  int get totalExpense => totalFuel + totalOtherExpense;
+
+  int get totalProfit => totalRevenue - totalExpense;
 
   int get totalKm => fold(0, (sum, duty) => sum + duty.totalKm);
 
@@ -139,5 +141,29 @@ extension DutyListExtension on List<Duty> {
     return expenseBreakdown.entries
         .reduce((a, b) => a.value > b.value ? a : b)
         .key;
+  }
+
+  String? get bestPerformingPlace {
+    if (isEmpty) return null;
+
+    final grouped = groupByPlace();
+
+    return grouped.entries
+        .reduce((a, b) => a.value.totalProfit > b.value.totalProfit ? a : b)
+        .key;
+  }
+
+  // Map<String, int> get profitByPlace {
+  //   final grouped = groupByPlace();
+  //
+  //   return grouped.map((place, duties) => MapEntry(place, duties.totalProfit));
+  // }
+
+  List<MapEntry<String, List<Duty>>> get placesByProfit {
+    final places = groupByPlace().entries.toList();
+
+    places.sort((a, b) => b.value.totalProfit.compareTo(a.value.totalProfit));
+
+    return places;
   }
 }

@@ -3,21 +3,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/enumerations/ac_type.dart';
 import '../../core/extensions/duty_list_extension.dart';
-import '../../core/extensions/number_extension.dart';
 import '../../core/theme/app_colors.dart';
 import '../../data/database/app_database.dart';
 import '../../providers/duties_provider.dart';
 import '../../providers/duty_summary_provider.dart';
 import '../../shared/widgets/records_filter_header.dart';
-import '../../shared/widgets/success_box.dart';
-import '../../shared/widgets/warning_box.dart';
 import 'widgets/ac_km_donut_chart.dart';
 import 'widgets/ac_profit_donut_chart.dart';
 import 'widgets/ac_type_donut_chart.dart';
 import 'widgets/analysis_card.dart';
-import 'widgets/editable_info_row.dart';
 import 'widgets/expense_donut_chart.dart';
-import 'widgets/info_row.dart';
+import 'widgets/place_profit_donut_chart.dart';
+import 'widgets/place_visit_donut_chart.dart';
 import 'widgets/revenue_distribution_donut_chart.dart';
 
 class AnalysisScreen extends ConsumerWidget {
@@ -121,41 +118,16 @@ class AnalysisScreen extends ConsumerWidget {
                 ),
 
                 AnalysisCard(
-                  title: 'Fuel Validation',
-                  child: Column(
-                    children: [
-                      InfoRow(
-                        label: 'Total KM',
-                        value: '${summary.totalKm.formatted} KM',
-                      ),
+                  title: 'Place Profit Distribution',
+                  child: PlaceProfitDonutChart(
+                    placeGroups: duties.groupByPlace(),
+                  ),
+                ),
 
-                      EditableInfoRow(label: 'Mileage', value: '$mileage KM/L'),
-
-                      EditableInfoRow(
-                        label: 'Fuel Price',
-                        value: fuelPrice.inr,
-                      ),
-
-                      InfoRow(
-                        label: 'Expected Fuel Cost',
-                        value: expectedFuel.inr,
-                      ),
-
-                      InfoRow(label: 'Actual Fuel Cost', value: actualFuel.inr),
-
-                      const SizedBox(height: 8),
-
-                      if (fuelDifference >= 0)
-                        SuccessBox(
-                          message:
-                              'Fuel expense is ${fuelDifference.inr} lower than expected.',
-                        )
-                      else
-                        WarningBox(
-                          message:
-                              'Fuel expense exceeded expected by ${(-fuelDifference).inr}.',
-                        ),
-                    ],
+                AnalysisCard(
+                  title: 'Place Visit Distribution',
+                  child: PlaceVisitDonutChart(
+                    placeGroups: duties.groupByPlace(),
                   ),
                 ),
               ],

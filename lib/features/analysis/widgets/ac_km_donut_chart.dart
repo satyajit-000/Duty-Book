@@ -97,7 +97,7 @@ class AcKmDonutChart extends StatelessWidget {
 
                   Text(
                     '${avgKm.formatted} KM/duty',
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.grey,
                       fontWeight: FontWeight.w600,
                     ),

@@ -82,7 +82,7 @@ class RevenueDistributionDonutChart extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(
                     'Profit: ${profitPercent.percent}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: AppColors.success,
                       fontWeight: FontWeight.w600,
                     ),

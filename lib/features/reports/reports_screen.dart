@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/enumerations/ac_type.dart';
+import '../../core/extensions/duty_list_extension.dart';
+import '../../core/extensions/number_extension.dart';
 import '../../core/theme/app_colors.dart';
+import '../../data/database/app_database.dart';
+import '../../providers/duties_provider.dart';
+import '../../providers/duty_summary_provider.dart';
 import '../../shared/widgets/records_filter_header.dart';
+import '../../shared/widgets/success_box.dart';
+import '../../shared/widgets/warning_box.dart';
+import '../analysis/widgets/editable_info_row.dart';
+import 'widgets/place_distribution_card.dart';
 import 'widgets/report_card.dart';
 import 'widgets/report_row.dart';
 
@@ -11,6 +21,85 @@ class ReportsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final duties = ref
+        .watch(dutiesProvider)
+        .maybeWhen(data: (duties) => duties, orElse: () => <Duty>[]);
+
+    final summary = ref.watch(dutySummaryProvider);
+
+    final fullAcDuties = duties
+        .where((duty) => duty.acType == AcType.full)
+        .toList();
+    final halfAcDuties = duties
+        .where((duty) => duty.acType == AcType.half)
+        .toList();
+    final nonAcDuties = duties
+        .where((duty) => duty.acType == AcType.non)
+        .toList();
+
+    final bestPlace = duties.bestPerformingPlace;
+
+    final bestPlaceDuties = bestPlace == null
+        ? <Duty>[]
+        : duties.groupByPlace()[bestPlace] ?? <Duty>[];
+
+    const mileage = 12.0;
+    const fuelPrice = 102.0;
+
+    final expectedFuelCost = mileage == 0
+        ? 0
+        : ((summary.totalKm / mileage) * fuelPrice).round();
+
+    final fuelDifference = expectedFuelCost - summary.totalFuel;
+
+    final acPerformanceData = [
+      (
+        metric: 'Duties',
+        full: fullAcDuties.length.toString(),
+        half: halfAcDuties.length.toString(),
+        non: nonAcDuties.length.toString(),
+      ),
+      (
+        metric: 'KM',
+        full: fullAcDuties.totalKm.formatted,
+        half: halfAcDuties.totalKm.formatted,
+        non: nonAcDuties.totalKm.formatted,
+      ),
+      (
+        metric: 'Revenue',
+        full: fullAcDuties.totalRevenue.inr,
+        half: halfAcDuties.totalRevenue.inr,
+        non: nonAcDuties.totalRevenue.inr,
+      ),
+      (
+        metric: 'Fuel',
+        full: fullAcDuties.totalFuel.inr,
+        half: halfAcDuties.totalFuel.inr,
+        non: nonAcDuties.totalFuel.inr,
+      ),
+      (
+        metric: 'Profit',
+        full: fullAcDuties.totalProfit.inr,
+        half: halfAcDuties.totalProfit.inr,
+        non: nonAcDuties.totalProfit.inr,
+      ),
+      (
+        metric: 'Profit / KM',
+        full: fullAcDuties.averageProfit.inr,
+        half: halfAcDuties.averageProfit.inr,
+        non: nonAcDuties.averageProfit.inr,
+      ),
+    ];
+
+    final bestAc = duties.bestAcType;
+
+    final bestAcDuties = switch (bestAc) {
+      AcType.full => fullAcDuties,
+      AcType.half => halfAcDuties,
+      AcType.non => nonAcDuties,
+      null => <Duty>[],
+    };
+
     return Scaffold(
       backgroundColor: AppColors.background,
       body: Column(
@@ -20,24 +109,23 @@ class ReportsScreen extends ConsumerWidget {
           Expanded(
             child: ListView(
               padding: const EdgeInsets.all(16),
-              children: const [
-                Text(
-                  'Showing: monthly',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: AppColors.textSecondary,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                SizedBox(height: 12),
-
+              children: [
                 ReportCard(
                   title: 'Duty Summary',
                   child: Column(
                     children: [
-                      ReportRow(label: 'Total Duties', value: '22'),
-                      ReportRow(label: 'Total KM', value: '1,845 KM'),
-                      ReportRow(label: 'Average KM / Duty', value: '84 KM'),
+                      ReportRow(
+                        label: 'Total Duties',
+                        value: summary.totalDuties.toString(),
+                      ),
+                      ReportRow(
+                        label: 'Total KM',
+                        value: '${summary.totalKm.formatted} KM',
+                      ),
+                      ReportRow(
+                        label: 'Average KM / Duty',
+                        value: '${duties.averageKm.round().formatted} KM',
+                      ),
                     ],
                   ),
                 ),
@@ -48,23 +136,26 @@ class ReportsScreen extends ConsumerWidget {
                     children: [
                       ReportRow(
                         label: 'Revenue',
-                        value: '₹26,000',
+                        value: '+${summary.totalRevenue.inr}',
                         valueColor: AppColors.success,
                       ),
                       ReportRow(
                         label: 'Fuel Expense',
-                        value: '₹9,500',
+                        value: '-${summary.totalFuel.inr}',
                         valueColor: AppColors.expense,
                       ),
                       ReportRow(
                         label: 'Other Expenses',
-                        value: '₹1,850',
+                        value: '-${summary.totalOtherExpense.inr}',
                         valueColor: AppColors.expense,
                       ),
+                      const Divider(),
                       ReportRow(
                         label: 'Net Profit',
-                        value: '₹14,650',
-                        valueColor: AppColors.success,
+                        value: '+${summary.totalProfit.inr}',
+                        valueColor: summary.totalProfit >= 0
+                            ? AppColors.success
+                            : AppColors.expense,
                       ),
                     ],
                   ),
@@ -74,13 +165,14 @@ class ReportsScreen extends ConsumerWidget {
                   title: 'Other Expenses',
                   child: Column(
                     children: [
-                      ReportRow(label: 'Parking', value: '₹450'),
-                      ReportRow(label: 'Toll', value: '₹1,200'),
-                      ReportRow(label: 'Service', value: '₹800'),
-                      ReportRow(label: 'Tyre', value: '₹0'),
-                      ReportRow(label: 'Insurance', value: '₹0'),
-                      ReportRow(label: 'Engine Oil', value: '₹600'),
-                      ReportRow(label: 'Custom Expenses', value: '₹300'),
+                      ...duties.expenseBreakdown.entries.map(
+                        (expense) => ReportRow(
+                          label: expense.key,
+                          value: expense.value.inr,
+                        ),
+                      ),
+                      const Divider(),
+                      ReportRow(label: 'Total', value: duties.totalExpense.inr),
                     ],
                   ),
                 ),
@@ -89,59 +181,158 @@ class ReportsScreen extends ConsumerWidget {
                   title: 'Fuel Validation',
                   child: Column(
                     children: [
-                      ReportRow(label: 'Mileage', value: '18 KM/L'),
-                      ReportRow(label: 'Fuel Price', value: '₹110'),
-                      ReportRow(label: 'Expected Fuel Cost', value: '₹11,275'),
-                      ReportRow(label: 'Actual Fuel Cost', value: '₹9,500'),
+                      const ReportRow(label: 'Mileage', value: '$mileage KM/L'),
+                      ReportRow(label: 'Fuel Price', value: fuelPrice.inr),
+                      ReportRow(
+                        label: 'Expected Fuel Cost',
+                        value: expectedFuelCost.inr,
+                      ),
+                      ReportRow(
+                        label: 'Actual Fuel Cost',
+                        value: summary.totalFuel.inr,
+                      ),
                       ReportRow(
                         label: 'Difference',
-                        value: '+₹1,775',
-                        valueColor: AppColors.success,
+                        value: fuelDifference >= 0
+                            ? '+${fuelDifference.inr}'
+                            : '-${(-fuelDifference).inr}',
+                        valueColor: fuelDifference >= 0
+                            ? AppColors.success
+                            : AppColors.expense,
                       ),
                     ],
                   ),
                 ),
 
                 ReportCard(
-                  title: 'AC Wise Report',
+                  title: 'Fuel Validation',
                   child: Column(
                     children: [
-                      ReportRow(label: 'Full AC Duties', value: '8'),
-                      ReportRow(label: 'Full AC Revenue', value: '₹12,000'),
                       ReportRow(
-                        label: 'Full AC Profit',
-                        value: '₹7,200',
-                        valueColor: AppColors.success,
+                        label: 'Total KM',
+                        value: '${summary.totalKm.formatted} KM',
                       ),
-                      ReportRow(label: 'Half AC Duties', value: '7'),
-                      ReportRow(label: 'Half AC Revenue', value: '₹9,000'),
-                      ReportRow(
-                        label: 'Half AC Profit',
-                        value: '₹4,200',
-                        valueColor: AppColors.success,
+
+                      EditableInfoRow(label: 'Mileage', value: '$mileage KM/L'),
+
+                      EditableInfoRow(
+                        label: 'Fuel Price',
+                        value: fuelPrice.inr,
                       ),
-                      ReportRow(label: 'Non AC Duties', value: '4'),
-                      ReportRow(label: 'Non AC Revenue', value: '₹5,000'),
+
                       ReportRow(
-                        label: 'Non AC Profit',
-                        value: '₹1,800',
-                        valueColor: AppColors.success,
+                        label: 'Expected Fuel Cost',
+                        value: expectedFuelCost.inr,
+                      ),
+
+                      ReportRow(
+                        label: 'Actual Fuel Cost',
+                        value: summary.totalFuel.inr,
+                      ),
+                      const Divider(),
+                      ReportRow(
+                        label: 'Difference',
+                        value: fuelDifference >= 0
+                            ? '+${fuelDifference.inr}'
+                            : '-${(-fuelDifference).inr}',
+                        valueColor: fuelDifference >= 0
+                            ? AppColors.success
+                            : AppColors.expense,
+                      ),
+
+                      const SizedBox(height: 8),
+
+                      if (fuelDifference >= 0)
+                        SuccessBox(
+                          message:
+                              'Fuel expense is ${fuelDifference.inr} lower than expected.',
+                        )
+                      else
+                        WarningBox(
+                          message:
+                              'Fuel expense exceeded expected by ${(-fuelDifference).inr}.',
+                        ),
+                    ],
+                  ),
+                ),
+
+                ReportCard(
+                  title: 'AC Performance Comparison',
+                  child: Table(
+                    border: TableBorder.all(
+                      color: AppColors.border,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    columnWidths: const {
+                      0: FlexColumnWidth(),
+                      1: FlexColumnWidth(),
+                      2: FlexColumnWidth(),
+                      3: FlexColumnWidth(),
+                    },
+                    defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                    children: [
+                      const TableRow(
+                        decoration: BoxDecoration(
+                          color: AppColors.primaryLight,
+                        ),
+                        children: [
+                          _TableCell('Metric', isHeader: true),
+                          _TableCell('Full', isHeader: true),
+                          _TableCell('Half', isHeader: true),
+                          _TableCell('Non', isHeader: true),
+                        ],
+                      ),
+
+                      ...acPerformanceData.map(
+                        (row) => TableRow(
+                          children: [
+                            _TableCell(row.metric, isHeader: true),
+                            _TableCell(row.full),
+                            _TableCell(row.half),
+                            _TableCell(row.non),
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 ),
 
                 ReportCard(
-                  title: 'Best Performing AC Type',
+                  title: 'Best Performing AC',
                   child: Column(
                     children: [
-                      ReportRow(label: 'Most Profitable', value: 'Full AC 🏆'),
                       ReportRow(
-                        label: 'Average Profit',
-                        value: '₹900 / duty',
+                        label: 'Best AC Type',
+                        value: bestAc?.displayName ?? '-',
+                      ),
+
+                      ReportRow(
+                        label: 'Total Duties',
+                        value: bestAcDuties.length.toString(),
+                      ),
+
+                      ReportRow(
+                        label: 'Total Revenue',
+                        value: bestAcDuties.totalRevenue.inr,
+                      ),
+
+                      ReportRow(
+                        label: 'Total Profit',
+                        value: bestAcDuties.totalProfit.inr,
                         valueColor: AppColors.success,
                       ),
-                      ReportRow(label: 'Average Distance', value: '80 KM'),
+
+                      ReportRow(
+                        label: 'Average Profit / KM',
+                        value: bestAcDuties.averageProfit.inr,
+                        valueColor: AppColors.success,
+                      ),
+
+                      ReportRow(
+                        label: 'Average KM / duty',
+                        value:
+                            '+${bestAcDuties.averageKm.round().formatted} KM',
+                      ),
                     ],
                   ),
                 ),
@@ -150,25 +341,63 @@ class ReportsScreen extends ConsumerWidget {
                   title: 'Best Performing Place',
                   child: Column(
                     children: [
+                      ReportRow(label: 'Place', value: bestPlace ?? '-'),
                       ReportRow(
-                        label: 'Most Profitable Place',
-                        value: 'Puri 🏆',
+                        label: 'Total Duties',
+                        value: bestPlaceDuties.length.toString(),
                       ),
                       ReportRow(
-                        label: 'Average Profit',
-                        value: '₹1,250 / duty',
+                        label: 'Total KM',
+                        value: '${bestPlaceDuties.totalKm.formatted} KM',
+                      ),
+                      ReportRow(
+                        label: 'Total Revenue',
+                        value: bestPlaceDuties.totalRevenue.inr,
+                      ),
+                      ReportRow(
+                        label: 'Total Profit',
+                        value: bestPlaceDuties.totalProfit.inr,
                         valueColor: AppColors.success,
                       ),
-                      ReportRow(label: 'Average Distance', value: '180 KM'),
-                      ReportRow(label: 'Total Duties', value: '5'),
-                      ReportRow(label: 'Total Revenue', value: '₹16,000'),
+                      ReportRow(
+                        label: 'Average Profit / KM',
+                        value: bestPlaceDuties.averageProfit.inr,
+                        valueColor: AppColors.success,
+                      ),
                     ],
                   ),
+                ),
+
+                ReportCard(
+                  title: 'Place Distribution',
+                  child: PlaceDistributionCard(places: duties.placesByProfit),
                 ),
               ],
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _TableCell extends StatelessWidget {
+  final String text;
+  final bool isHeader;
+
+  const _TableCell(this.text, {this.isHeader = false});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+      child: Text(
+        text,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontWeight: isHeader ? FontWeight.w700 : FontWeight.w500,
+          color: isHeader ? AppColors.primary : AppColors.textPrimary,
+        ),
       ),
     );
   }

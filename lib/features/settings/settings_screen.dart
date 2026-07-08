@@ -59,7 +59,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ),
                         ),
                       ),
-                      // const SizedBox(width: 10),
                       SizedBox(
                         height: 52,
                         child: IconButton(
