@@ -30,6 +30,12 @@ class AcTypeDonutChart extends StatelessWidget {
     final halfPercent = halfCount / total;
     final nonPercent = nonCount / total;
 
+    final mostUsed = [
+      (type: AcType.full, count: fullCount),
+      (type: AcType.half, count: halfCount),
+      (type: AcType.non, count: nonCount),
+    ].reduce((a, b) => a.count >= b.count ? a : b);
+
     return Column(
       children: [
         SizedBox(
@@ -90,20 +96,28 @@ class AcTypeDonutChart extends StatelessWidget {
                   const SizedBox(height: 4),
 
                   Text(
-                    total.inr,
+                    total.formatted,
                     style: const TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w800,
-                      color: AppColors.success,
+                      color: AppColors.primary,
                     ),
                   ),
 
                   const SizedBox(height: 2),
 
                   const Text(
-                    '100%',
+                    'Most Used',
                     style: TextStyle(
                       color: Colors.grey,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+
+                  Text(
+                    mostUsed.type.displayName,
+                    style: TextStyle(
+                      color: AppColors.success,
                       fontWeight: FontWeight.w600,
                     ),
                   ),

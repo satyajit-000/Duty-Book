@@ -77,7 +77,10 @@ class AnalysisScreen extends ConsumerWidget {
 
                 AnalysisCard(
                   title: 'Expense Breakdown',
-                  child: ExpenseDonutChart(expenses: duties.expenseBreakdown),
+                  child: ExpenseDonutChart(
+                    expenses: duties.expenseBreakdown,
+                    revenue: summary.totalRevenue,
+                  ),
                 ),
 
                 AnalysisCard(
@@ -99,6 +102,7 @@ class AnalysisScreen extends ConsumerWidget {
                     fullProfitPerKm: fullAcDuties.averageProfit,
                     halfProfitPerKm: halfAcDuties.averageProfit,
                     nonProfitPerKm: nonAcDuties.averageProfit,
+                    avgProfitPerKm: duties.averageProfit,
                   ),
                 ),
 
@@ -112,6 +116,7 @@ class AnalysisScreen extends ConsumerWidget {
                     fullAvgKm: fullAcDuties.averageKm,
                     halfAvgKm: halfAcDuties.averageKm,
                     nonAvgKm: nonAcDuties.averageKm,
+                    avgKm: duties.averageKm,
                   ),
                 ),
 

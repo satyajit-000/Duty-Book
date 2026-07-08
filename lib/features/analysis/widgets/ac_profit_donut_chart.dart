@@ -14,6 +14,7 @@ class AcProfitDonutChart extends StatelessWidget {
   final double fullProfitPerKm;
   final double halfProfitPerKm;
   final double nonProfitPerKm;
+  final double avgProfitPerKm;
 
   const AcProfitDonutChart({
     super.key,
@@ -23,6 +24,7 @@ class AcProfitDonutChart extends StatelessWidget {
     required this.fullProfitPerKm,
     required this.halfProfitPerKm,
     required this.nonProfitPerKm,
+    required this.avgProfitPerKm,
   });
 
   @override
@@ -87,15 +89,15 @@ class AcProfitDonutChart extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w800,
-                      color: AppColors.success,
+                      color: AppColors.primary,
                     ),
                   ),
 
                   const SizedBox(height: 2),
 
-                  const Text(
-                    '100%',
-                    style: TextStyle(
+                  Text(
+                    '${avgProfitPerKm.inr}/KM avg',
+                    style: const TextStyle(
                       color: Colors.grey,
                       fontWeight: FontWeight.w600,
                     ),

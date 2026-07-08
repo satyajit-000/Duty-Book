@@ -27,3 +27,13 @@ extension DoubleExtension on double {
     return '${(this * 100).toStringAsFixed(decimalPlaces)}%';
   }
 }
+
+extension StringExtenstion on String {
+  String get inr {
+    return '₹$this';
+  }
+
+  String get percent {
+    return '$this%';
+  }
+}

@@ -7,6 +7,8 @@ class AppColors {
   static const Color primaryDark = Color(0xFF115E59);
   static const Color primaryLight = Color(0xFFE0F2F1);
 
+  static const Color danger = Color(0xFFE43838);
+
   static const Color background = Color(0xFFF3F7F6);
   static const Color surface = Color(0xFFFFFFFF);
 

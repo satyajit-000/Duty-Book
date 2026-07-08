@@ -5,17 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a3cd3efd-0231-447b-9933-a6f805eecca0" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/core/extensions/duty_list_extension.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/core/extensions/duty_list_extension.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/core/extensions/number_extension.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/core/extensions/number_extension.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/core/theme/app_colors.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/core/theme/app_colors.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/data/services/duty_service.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/data/services/duty_service.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/features/analysis/analysis_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/analysis/analysis_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/analysis/widgets/ac_profit_row.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/analysis/widgets/ac_profit_row.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/features/records/widgets/record_tile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/records/widgets/record_tile.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/shared/widgets/records_filter_header.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/shared/widgets/records_filter_header.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/analysis/widgets/ac_km_donut_chart.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/analysis/widgets/ac_km_donut_chart.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/analysis/widgets/ac_profit_donut_chart.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/analysis/widgets/ac_profit_donut_chart.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/analysis/widgets/ac_type_donut_chart.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/analysis/widgets/ac_type_donut_chart.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/analysis/widgets/editable_info_row.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/analysis/widgets/editable_info_row.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/analysis/widgets/expense_donut_chart.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/analysis/widgets/expense_donut_chart.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/features/analysis/widgets/revenue_distribution_donut_chart.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/features/analysis/widgets/revenue_distribution_donut_chart.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

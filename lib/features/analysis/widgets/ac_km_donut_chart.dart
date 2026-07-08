@@ -14,6 +14,7 @@ class AcKmDonutChart extends StatelessWidget {
   final double fullAvgKm;
   final double halfAvgKm;
   final double nonAvgKm;
+  final double avgKm;
 
   const AcKmDonutChart({
     super.key,
@@ -23,6 +24,7 @@ class AcKmDonutChart extends StatelessWidget {
     required this.fullAvgKm,
     required this.halfAvgKm,
     required this.nonAvgKm,
+    required this.avgKm,
   });
 
   @override
@@ -93,8 +95,8 @@ class AcKmDonutChart extends StatelessWidget {
 
                   const SizedBox(height: 2),
 
-                  const Text(
-                    '100%',
+                  Text(
+                    '${avgKm.formatted} KM/duty',
                     style: TextStyle(
                       color: Colors.grey,
                       fontWeight: FontWeight.w600,
@@ -159,7 +161,7 @@ class _KmLegend extends StatelessWidget {
   Widget build(BuildContext context) {
     return Legend(
       title: acType.displayName,
-      text: '${avgKm.formatted} KM avg',
+      text: '${avgKm.formatted} KM/duty',
       color: color,
       value: '${km.formatted} KM',
       percent: percent,

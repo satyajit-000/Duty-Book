@@ -5,8 +5,14 @@ import '../../../core/theme/app_colors.dart';
 class EditableInfoRow extends StatelessWidget {
   final String label;
   final String value;
+  final VoidCallback? onTap;
 
-  const EditableInfoRow({super.key, required this.label, required this.value});
+  const EditableInfoRow({
+    super.key,
+    required this.label,
+    required this.value,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,10 +30,13 @@ class EditableInfoRow extends StatelessWidget {
             children: [
               Text(value, style: const TextStyle(fontWeight: FontWeight.w800)),
               const SizedBox(width: 6),
-              const Icon(
-                Icons.edit_rounded,
-                size: 16,
-                color: AppColors.primary,
+              GestureDetector(
+                onTap: onTap,
+                child: const Icon(
+                  Icons.edit_rounded,
+                  size: 16,
+                  color: AppColors.primary,
+                ),
               ),
             ],
           ),

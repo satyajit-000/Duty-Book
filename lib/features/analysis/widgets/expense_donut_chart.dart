@@ -7,8 +7,13 @@ import 'legend.dart';
 
 class ExpenseDonutChart extends StatelessWidget {
   final Map<String, int> expenses;
+  final int revenue;
 
-  const ExpenseDonutChart({super.key, required this.expenses});
+  const ExpenseDonutChart({
+    super.key,
+    required this.expenses,
+    required this.revenue,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +30,9 @@ class ExpenseDonutChart extends StatelessWidget {
       (sum, expense) => sum + expense.value,
     );
 
-    final colors = [
+    final totalExpensePercentOfRevenue = total / revenue;
+
+    final colors = const [
       AppColors.expense,
       AppColors.warning,
       AppColors.primary,
@@ -45,7 +52,7 @@ class ExpenseDonutChart extends StatelessWidget {
             children: [
               PieChart(
                 PieChartData(
-                  centerSpaceRadius: 55,
+                  centerSpaceRadius: 60,
                   sectionsSpace: 3,
                   sections: List.generate(filteredExpenses.length, (index) {
                     final expense = filteredExpenses[index];
@@ -81,14 +88,21 @@ class ExpenseDonutChart extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w800,
-                      color: AppColors.expense,
+                      color: AppColors.danger,
                     ),
                   ),
 
                   const SizedBox(height: 2),
 
+                  Text(
+                    totalExpensePercentOfRevenue.percent,
+                    style: const TextStyle(
+                      color: AppColors.expense,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                   const Text(
-                    '100%',
+                    'of Revenue',
                     style: TextStyle(
                       color: Colors.grey,
                       fontWeight: FontWeight.w600,
