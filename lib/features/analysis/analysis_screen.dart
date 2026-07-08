@@ -9,6 +9,8 @@ import '../../data/database/app_database.dart';
 import '../../providers/duties_provider.dart';
 import '../../providers/duty_summary_provider.dart';
 import '../../shared/widgets/records_filter_header.dart';
+import '../../shared/widgets/success_box.dart';
+import '../../shared/widgets/warning_box.dart';
 import 'widgets/ac_km_donut_chart.dart';
 import 'widgets/ac_profit_donut_chart.dart';
 import 'widgets/ac_type_donut_chart.dart';
@@ -17,8 +19,6 @@ import 'widgets/editable_info_row.dart';
 import 'widgets/expense_donut_chart.dart';
 import 'widgets/info_row.dart';
 import 'widgets/revenue_distribution_donut_chart.dart';
-import 'widgets/success_box.dart';
-import 'widgets/warning_box.dart';
 
 class AnalysisScreen extends ConsumerWidget {
   const AnalysisScreen({super.key});

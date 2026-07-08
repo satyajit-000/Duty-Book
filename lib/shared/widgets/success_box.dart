@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/theme/app_colors.dart';
+import '../../core/theme/app_colors.dart';
 
-class InfoBox extends StatelessWidget {
+class SuccessBox extends StatelessWidget {
   final String message;
 
-  const InfoBox({super.key, required this.message});
+  const SuccessBox({super.key, required this.message});
 
   @override
   Widget build(BuildContext context) {
@@ -13,13 +13,13 @@ class InfoBox extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: AppColors.info.withValues(alpha: 0.16),
+        color: AppColors.success.withValues(alpha: 0.14),
         borderRadius: BorderRadius.circular(14),
       ),
       child: Text(
         message,
         style: const TextStyle(
-          color: AppColors.info,
+          color: AppColors.success,
           fontWeight: FontWeight.w700,
         ),
       ),
